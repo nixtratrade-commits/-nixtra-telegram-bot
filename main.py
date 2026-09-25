@@ -118,28 +118,22 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "در این قسمت می‌تونی با پشتیبانی Nixtra در ارتباط باشی."
         )
     elif text == "🎁 تست رایگان سیگنال":
-        keyboard = InlineKeyboardMarkup([
+                keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton(
-                "📢 ورود به کانال سیگنال رایگان",
+                "📢 عضویت در کانال",
                 url=FREE_SIGNAL_CHANNEL
+            )],
+            [InlineKeyboardButton(
+                "✅ عضو شدم",
+                callback_data="check_free_channel"
             )]
         ])
 
         await update.message.reply_text(
             "🎁 سیگنال رایگان Nixtra\n\n"
             "برای مشاهده سیگنال‌های رایگان، وارد کانال شو 👇",
-           keyboard = InlineKeyboardMarkup([
-    [InlineKeyboardButton(
-        "📢 عضویت در کانال",
-        url=FREE_SIGNAL_CHANNEL
-    )],
-    [InlineKeyboardButton(
-        "✅ عضو شدم",
-        callback_data="check_free_channel"
-    )]
-])
+            reply_markup=keyboard
         )
-
     elif text == "💳 خرید سیگنال":
         await update.message.reply_text(
             "📊 اشتراک سیگنال Nixtra\n\n"
