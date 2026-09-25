@@ -115,12 +115,25 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "💬 بخش پشتیبانی\n\n"
             "در این قسمت می‌تونی با پشتیبانی Nixtra در ارتباط باشی."
         )
-
     elif text == "🎁 تست رایگان سیگنال":
+        user = update.effective_user
+
         await update.message.reply_text(
-            "🎁 تست رایگان سیگنال\n\n"
-            "اطلاعات دریافت تست رایگان به‌زودی در این قسمت قرار می‌گیره."
+            "🎁 درخواست تست رایگان شما ثبت شد ✅\n\n"
+            "سیگنال تست پس از بررسی برای شما ارسال می‌شود."
         )
+
+        if ADMIN_ID:
+            await context.bot.send_message(
+                chat_id=int(ADMIN_ID),
+                text=(
+                    "🔔 درخواست جدید تست رایگان\n\n"
+                    f"👤 نام: {user.full_name}\n"
+                    f"📱 یوزرنیم: @{user.username if user.username else 'ندارد'}\n"
+                    f"🆔 Telegram ID: {user.id}\n\n"
+                    "این کاربر منتظر دریافت سیگنال تست است."
+                )
+            )
 
     elif text == "💳 خرید سیگنال":
         await update.message.reply_text(
