@@ -267,17 +267,17 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
             show_alert=True
         )
         async def approve_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
+        query = update.callback_query
+        await query.answer()
 
-    user_id = int(query.data.split(":")[1])
+        user_id = int(query.data.split(":")[1])
 
-    invite = await context.bot.create_chat_invite_link(
+        invite = await context.bot.create_chat_invite_link(
         chat_id=int(VIP_CHANNEL_ID),
         member_limit=1
     )
 
-    await context.bot.send_message(
+        await context.bot.send_message(
         chat_id=user_id,
         text=(
             "✅ پرداخت شما تأیید شد.\n\n"
@@ -287,8 +287,8 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
         )
     )
 
-    await query.edit_message_reply_markup(reply_markup=None)
-    await query.message.reply_text("✅ پرداخت تأیید شد و لینک VIP برای خریدار ارسال شد.")
+        await query.edit_message_reply_markup(reply_markup=None)
+        await query.message.reply_text("✅ پرداخت تأیید شد و لینک VIP برای خریدار ارسال شد.")
 async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = update.effective_user
 
