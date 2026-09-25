@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, ContextTyp
 
 TOKEN = os.environ.get("BOT_TOKEN")
 ADMIN_ID = os.environ.get("ADMIN_ID")
-
+PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
 # ---------- Render Health Server ----------
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -151,9 +151,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "🛒 ثبت درخواست خرید":
         user = update.effective_user
 
-        await update.message.reply_text(
-            "✅ درخواست خرید اشتراک شما ثبت شد.\n\n"
-            "پشتیبانی Nixtra برای ادامه مراحل خرید با شما در ارتباط خواهد بود."
+     await update.message.reply_text(
+    "💳 پرداخت اشتراک سیگنال Nixtra\n\n"
+    "💵 مبلغ: 10 USDT\n"
+    "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+    f"👛 آدرس کیف پول:\n{PAYMENT_WALLET}\n\n"
+    "⚠️ لطفاً فقط USDT روی شبکه BEP20 ارسال کنید.\n\n"
+    "بعد از پرداخت، رسید پرداخت را ارسال کنید."
+)."
         )
 
         if ADMIN_ID:
