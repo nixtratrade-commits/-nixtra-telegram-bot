@@ -227,7 +227,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "لطفاً یکی از گزینه‌های منو رو انتخاب کن 👇",
             reply_markup=main_menu()
         )
-
+async def channel_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(f"CHANNEL_ID={update.effective_chat.id}")
 
 # ---------- Run ----------
 
@@ -244,6 +245,7 @@ def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.ChatType.CHANNEL, channel_id))
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
     )
