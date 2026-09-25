@@ -2,12 +2,13 @@ import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 TOKEN = os.environ.get("BOT_TOKEN")
 ADMIN_ID = os.environ.get("ADMIN_ID")
 PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
+FREE_SIGNAL_CHANNEL = os.environ.get("FREE_SIGNAL_CHANNEL")
 # ---------- Render Health Server ----------
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -116,24 +117,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "در این قسمت می‌تونی با پشتیبانی Nixtra در ارتباط باشی."
         )
     elif text == "🎁 تست رایگان سیگنال":
-        user = update.effective_user
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton(
+                "📢 ورود به کانال سیگنال رایگان",
+                url=FREE_SIGNAL_CHANNEL
+            )]
+        ])
 
         await update.message.reply_text(
-            "🎁 درخواست تست رایگان شما ثبت شد ✅\n\n"
-            "سیگنال تست پس از بررسی برای شما ارسال می‌شود."
+            "🎁 سیگنال رایگان Nixtra\n\n"
+            "برای مشاهده سیگنال‌های رایگان، وارد کانال شو 👇",
+            reply_markup=keyboard
         )
-
-        if ADMIN_ID:
-            await context.bot.send_message(
-                chat_id=int(ADMIN_ID),
-                text=(
-                    "🔔 درخواست جدید تست رایگان\n\n"
-                    f"👤 نام: {user.full_name}\n"
-                    f"📱 یوزرنیم: @{user.username if user.username else 'ندارد'}\n"
-                    f"🆔 Telegram ID: {user.id}\n\n"
-                    "این کاربر منتظر دریافت سیگنال تست است."
-                )
-            )
 
     elif text == "💳 خرید سیگنال":
         await update.message.reply_text(
