@@ -347,7 +347,7 @@ async def approve_payment(
         print(f"VIP_APPROVAL_ERROR: {error}")
 
         await query.message.reply_text(
-            "⚠️ ارسال لینک VIP انجام نشد. لطفاً لاگ Render را بررسی کنید."
+f"⚠️ خطای VIP:\n{error}"
         )
 
 
