@@ -1,8 +1,21 @@
 import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
+
+from telegram import (
+    Update,
+    ReplyKeyboardMarkup,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+)
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    MessageHandler,
+    CallbackQueryHandler,
+    ContextTypes,
+    filters,
+)
 
 
 TOKEN = os.environ.get("BOT_TOKEN")
@@ -11,6 +24,8 @@ PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
 FREE_SIGNAL_CHANNEL = os.environ.get("FREE_SIGNAL_CHANNEL")
 FREE_CHANNEL_ID = os.environ.get("FREE_CHANNEL_ID")
 VIP_CHANNEL_ID = os.environ.get("VIP_CHANNEL_ID")
+
+
 # ---------- Render Health Server ----------
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -32,45 +47,60 @@ def run_web_server():
 # ---------- Keyboards ----------
 
 def main_menu():
-    return ReplyKeyboardMarkup([
-        ["📊 سیگنال‌ها", "🎓 آموزش‌ها"],
-        ["🎤 سمینارها", "🤖 پنل تخصصی AI"],
-        ["💬 پشتیبانی"]
-    ], resize_keyboard=True)
+    return ReplyKeyboardMarkup(
+        [
+            ["📊 سیگنال‌ها", "🎓 آموزش‌ها"],
+            ["🎤 سمینارها", "🤖 پنل تخصصی AI"],
+            ["💬 پشتیبانی"],
+        ],
+        resize_keyboard=True,
+    )
 
 
 def signals_menu():
-    return ReplyKeyboardMarkup([
-        ["🎁 تست رایگان سیگنال"],
-        ["💳 خرید سیگنال"],
-        ["🔎 استعلام وضعیت اشتراک"],
-        ["🔙 بازگشت"]
-    ], resize_keyboard=True)
+    return ReplyKeyboardMarkup(
+        [
+            ["🎁 تست رایگان سیگنال"],
+            ["💳 خرید سیگنال"],
+            ["🔎 استعلام وضعیت اشتراک"],
+            ["🔙 بازگشت"],
+        ],
+        resize_keyboard=True,
+    )
 
 
 def education_menu():
-    return ReplyKeyboardMarkup([
-        ["📚 عناوین دوره‌ها"],
-        ["💳 خرید اشتراک آموزش"],
-        ["🔙 بازگشت"]
-    ], resize_keyboard=True)
+    return ReplyKeyboardMarkup(
+        [
+            ["📚 عناوین دوره‌ها"],
+            ["💳 خرید اشتراک آموزش"],
+            ["🔙 بازگشت"],
+        ],
+        resize_keyboard=True,
+    )
 
 
 def seminars_menu():
-    return ReplyKeyboardMarkup([
-        ["📍 شهرهای برگزارکننده"],
-        ["🎟 خرید سمینار"],
-        ["🔎 استعلام ظرفیت"],
-        ["🔙 بازگشت"]
-    ], resize_keyboard=True)
+    return ReplyKeyboardMarkup(
+        [
+            ["📍 شهرهای برگزارکننده"],
+            ["🎟 خرید سمینار"],
+            ["🔎 استعلام ظرفیت"],
+            ["🔙 بازگشت"],
+        ],
+        resize_keyboard=True,
+    )
 
 
 def ai_menu():
-    return ReplyKeyboardMarkup([
-        ["🧠 مشاهده منوهای پنل"],
-        ["💳 خرید پنل تخصصی AI"],
-        ["🔙 بازگشت"]
-    ], resize_keyboard=True)
+    return ReplyKeyboardMarkup(
+        [
+            ["🧠 مشاهده منوهای پنل"],
+            ["💳 خرید پنل تخصصی AI"],
+            ["🔙 بازگشت"],
+        ],
+        resize_keyboard=True,
+    )
 
 
 # ---------- Start ----------
@@ -79,38 +109,37 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "به Nixtra خوش اومدی 👋\n\n"
         "خدمت موردنظرت رو از منوی زیر انتخاب کن 👇",
-        reply_markup=main_menu()
+        reply_markup=main_menu(),
     )
 
 
 # ---------- Messages ----------
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     text = update.message.text
 
     if text == "📊 سیگنال‌ها":
         await update.message.reply_text(
             "📊 بخش سیگنال‌ها\n\nیکی از گزینه‌های زیر رو انتخاب کن:",
-            reply_markup=signals_menu()
+            reply_markup=signals_menu(),
         )
 
     elif text == "🎓 آموزش‌ها":
         await update.message.reply_text(
             "🎓 بخش آموزش‌ها\n\nیکی از گزینه‌های زیر رو انتخاب کن:",
-            reply_markup=education_menu()
+            reply_markup=education_menu(),
         )
 
     elif text == "🎤 سمینارها":
         await update.message.reply_text(
             "🎤 بخش سمینارها\n\nیکی از گزینه‌های زیر رو انتخاب کن:",
-            reply_markup=seminars_menu()
+            reply_markup=seminars_menu(),
         )
 
     elif text == "🤖 پنل تخصصی AI":
         await update.message.reply_text(
             "🤖 پنل تخصصی AI\n\nیکی از گزینه‌های زیر رو انتخاب کن:",
-            reply_markup=ai_menu()
+            reply_markup=ai_menu(),
         )
 
     elif text == "💬 پشتیبانی":
@@ -118,27 +147,31 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "💬 بخش پشتیبانی\n\n"
             "در این قسمت می‌تونی با پشتیبانی Nixtra در ارتباط باشی."
         )
+
     elif text == "🎁 تست رایگان سیگنال":
-        keyboard = InlineKeyboardMarkup([
+        keyboard = InlineKeyboardMarkup(
             [
-                InlineKeyboardButton(
-                    "📢 عضویت در کانال",
-                    url=FREE_SIGNAL_CHANNEL
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    "✅ عضو شدم",
-                    callback_data="check_free_channel"
-                )
+                [
+                    InlineKeyboardButton(
+                        "📢 عضویت در کانال",
+                        url=FREE_SIGNAL_CHANNEL,
+                    )
+                ],
+                [
+                    InlineKeyboardButton(
+                        "✅ عضو شدم",
+                        callback_data="check_free_channel",
+                    )
+                ],
             ]
-        ])
+        )
 
         await update.message.reply_text(
             "🎁 سیگنال رایگان Nixtra\n\n"
             "برای مشاهده سیگنال‌های رایگان، وارد کانال شو 👇",
-            reply_markup=keyboard
+            reply_markup=keyboard,
         )
+
     elif text == "💳 خرید سیگنال":
         await update.message.reply_text(
             "📊 اشتراک سیگنال Nixtra\n\n"
@@ -146,22 +179,25 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "🔹 مدت اشتراک: ۳۰ روز\n"
             "🔹 قیمت: ۱۰ دلار\n\n"
             "برای تهیه اشتراک، گزینه «🛒 ثبت درخواست خرید» رو انتخاب کن.",
-            reply_markup=ReplyKeyboardMarkup([
-                ["🛒 ثبت درخواست خرید"],
-                ["🔙 بازگشت"]
-            ], resize_keyboard=True)
-        
+            reply_markup=ReplyKeyboardMarkup(
+                [
+                    ["🛒 ثبت درخواست خرید"],
+                    ["🔙 بازگشت"],
+                ],
+                resize_keyboard=True,
+            ),
         )
+
     elif text == "🛒 ثبت درخواست خرید":
         user = update.effective_user
 
         await update.message.reply_text(
-    "💳 پرداخت اشتراک سیگنال Nixtra\n\n"
-    "💵 مبلغ: 10 USDT\n"
-    "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
-    f"👛 آدرس کیف پول:\n{PAYMENT_WALLET}\n\n"
-    "⚠️ لطفاً فقط USDT روی شبکه BEP20 ارسال کنید.\n\n"
-    "بعد از پرداخت، رسید پرداخت را ارسال کنید."
+            "💳 پرداخت اشتراک سیگنال Nixtra\n\n"
+            "💵 مبلغ: 10 USDT\n"
+            "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+            f"👛 آدرس کیف پول:\n{PAYMENT_WALLET}\n\n"
+            "⚠️ لطفاً فقط USDT روی شبکه BEP20 ارسال کنید.\n\n"
+            "بعد از پرداخت، رسید پرداخت را ارسال کنید."
         )
 
         if ADMIN_ID:
@@ -175,8 +211,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "📊 پلن: روزانه ۱ سیگنال\n"
                     "📅 مدت: ۳۰ روز\n"
                     "💵 مبلغ: ۱۰ دلار"
-                )
+                ),
             )
+
     elif text == "🔎 استعلام وضعیت اشتراک":
         await update.message.reply_text(
             "🔎 استعلام وضعیت اشتراک\n\n"
@@ -228,17 +265,22 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "🔙 بازگشت":
         await update.message.reply_text(
             "🏠 منوی اصلی",
-            reply_markup=main_menu()
+            reply_markup=main_menu(),
         )
 
     else:
         await update.message.reply_text(
             "لطفاً یکی از گزینه‌های منو رو انتخاب کن 👇",
-            reply_markup=main_menu()
+            reply_markup=main_menu(),
         )
-async def channel_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print(f"CHANNEL_ID={update.effective_chat.id}")
-async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+
+# ---------- Free Channel Check ----------
+
+async def check_free_channel(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+):
     query = update.callback_query
     await query.answer()
 
@@ -247,7 +289,7 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
     try:
         member = await context.bot.get_chat_member(
             chat_id=int(FREE_CHANNEL_ID),
-            user_id=user_id
+            user_id=user_id,
         )
 
         if member.status in ["member", "administrator", "creator"]:
@@ -258,53 +300,78 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
         else:
             await query.answer(
                 "❌ هنوز عضو کانال نشدی. اول عضو شو و دوباره امتحان کن.",
-                show_alert=True
+                show_alert=True,
             )
 
     except Exception:
         await query.answer(
             "⚠️ امکان بررسی عضویت وجود نداشت. دوباره امتحان کن.",
-            show_alert=True
+            show_alert=True,
         )
-        async def approve_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
-        query = update.callback_query
-        await query.answer()
 
-        user_id = int(query.data.split(":")[1])
 
+# ---------- VIP Payment Approval ----------
+
+async def approve_payment(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+):
+    query = update.callback_query
+    await query.answer()
+
+    user_id = int(query.data.split(":")[1])
+
+    try:
         invite = await context.bot.create_chat_invite_link(
-        chat_id=int(VIP_CHANNEL_ID),
-        member_limit=1
-    )
+            chat_id=int(VIP_CHANNEL_ID),
+            member_limit=1,
+        )
 
         await context.bot.send_message(
-        chat_id=user_id,
-        text=(
-            "✅ پرداخت شما تأیید شد.\n\n"
-            "🎟 برای ورود به کانال VIP از لینک زیر استفاده کنید:\n"
-            f"{invite.invite_link}\n\n"
-            "⏳ مدت اشتراک شما ۳۰ روز است."
+            chat_id=user_id,
+            text=(
+                "✅ پرداخت شما تأیید شد.\n\n"
+                "🎟 برای ورود به کانال VIP از لینک زیر استفاده کنید:\n"
+                f"{invite.invite_link}\n\n"
+                "⏳ مدت اشتراک شما ۳۰ روز است."
+            ),
         )
-    )
 
         await query.edit_message_reply_markup(reply_markup=None)
-        await query.message.reply_text("✅ پرداخت تأیید شد و لینک VIP برای خریدار ارسال شد.")
-async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = update.effective_user
 
-        await update.message.reply_text(
+        await query.message.reply_text(
+            "✅ پرداخت تأیید شد و لینک VIP برای خریدار ارسال شد."
+        )
+
+    except Exception as error:
+        print(f"VIP_APPROVAL_ERROR: {error}")
+
+        await query.message.reply_text(
+            "⚠️ ارسال لینک VIP انجام نشد. لطفاً لاگ Render را بررسی کنید."
+        )
+
+
+# ---------- Payment Receipt ----------
+
+async def payment_receipt(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+):
+    user = update.effective_user
+
+    await update.message.reply_text(
         "✅ رسید پرداخت شما دریافت شد.\n\n"
         "⏳ لطفاً منتظر بمانید تا وضعیت واریز شما بررسی و تأیید شود."
     )
 
-        if ADMIN_ID:
-            await context.bot.forward_message(
+    if ADMIN_ID:
+        await context.bot.forward_message(
             chat_id=int(ADMIN_ID),
             from_chat_id=update.effective_chat.id,
-            message_id=update.message.message_id
+            message_id=update.message.message_id,
         )
 
-            await context.bot.send_message(
+        await context.bot.send_message(
             chat_id=int(ADMIN_ID),
             text=(
                 "💳 رسید جدید خرید سیگنال\n\n"
@@ -312,38 +379,60 @@ async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"🔹 Username: @{user.username if user.username else 'ندارد'}\n"
                 f"🆔 Telegram ID: {user.id}"
             ),
-            reply_markup=InlineKeyboardMarkup([
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton(
-                        "✅ تأیید واریز",
-                        callback_data=f"approve_payment:{user.id}"
-                    )
+                    [
+                        InlineKeyboardButton(
+                            "✅ تأیید واریز",
+                            callback_data=f"approve_payment:{user.id}",
+                        )
+                    ]
                 ]
-            ])
+            ),
         )
+
+
 # ---------- Run ----------
 
 def main():
-
     if not TOKEN:
         raise RuntimeError("BOT_TOKEN is not set")
 
     threading.Thread(
         target=run_web_server,
-        daemon=True
+        daemon=True,
     ).start()
 
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CallbackQueryHandler(check_free_channel, pattern="^check_free_channel$"))
-    app.add_handler(CallbackQueryHandler(approve_payment, pattern="^approve_payment:"))
-    app.add_handler(MessageHandler(filters.ChatType.CHANNEL, channel_id))
+
     app.add_handler(
-        MessageHandler(filters.PHOTO, payment_receipt)
+        CallbackQueryHandler(
+            check_free_channel,
+            pattern="^check_free_channel$",
+        )
     )
+
     app.add_handler(
-        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
+        CallbackQueryHandler(
+            approve_payment,
+            pattern="^approve_payment:",
+        )
+    )
+
+    app.add_handler(
+        MessageHandler(
+            filters.PHOTO,
+            payment_receipt,
+        )
+    )
+
+    app.add_handler(
+        MessageHandler(
+            filters.TEXT & ~filters.COMMAND,
+            handle_message,
+        )
     )
 
     app.run_polling()
