@@ -266,14 +266,14 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
             show_alert=True
         )
     async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
+        user = update.effective_user
 
-    await update.message.reply_text(
+        await update.message.reply_text(
         "✅ رسید پرداخت شما دریافت شد.\n\n"
         "⏳ لطفاً منتظر بمانید تا وضعیت واریز شما بررسی و تأیید شود."
     )
 
-    if ADMIN_ID:
+        if ADMIN_ID:
         await context.bot.forward_message(
             chat_id=int(ADMIN_ID),
             from_chat_id=update.effective_chat.id,
