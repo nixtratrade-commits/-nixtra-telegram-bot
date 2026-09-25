@@ -2,13 +2,14 @@ import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 TOKEN = os.environ.get("BOT_TOKEN")
 ADMIN_ID = os.environ.get("ADMIN_ID")
 PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
 FREE_SIGNAL_CHANNEL = os.environ.get("FREE_SIGNAL_CHANNEL")
+FREE_CHANNEL_ID = os.environ.get("FREE_CHANNEL_ID")
 # ---------- Render Health Server ----------
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -127,7 +128,16 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "🎁 سیگنال رایگان Nixtra\n\n"
             "برای مشاهده سیگنال‌های رایگان، وارد کانال شو 👇",
-            reply_markup=keyboard
+           keyboard = InlineKeyboardMarkup([
+    [InlineKeyboardButton(
+        "📢 عضویت در کانال",
+        url=FREE_SIGNAL_CHANNEL
+    )],
+    [InlineKeyboardButton(
+        "✅ عضو شدم",
+        callback_data="check_free_channel"
+    )]
+])
         )
 
     elif text == "💳 خرید سیگنال":
@@ -229,7 +239,34 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 async def channel_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(f"CHANNEL_ID={update.effective_chat.id}")
+async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
 
+    user_id = query.from_user.id
+
+    try:
+        member = await context.bot.get_chat_member(
+            chat_id=int(FREE_CHANNEL_ID),
+            user_id=user_id
+        )
+
+        if member.status in ["member", "administrator", "creator"]:
+            await query.message.reply_text(
+                "✅ عضویت شما تأیید شد.\n\n"
+                "به کانال سیگنال رایگان Nixtra خوش اومدی 🎉"
+            )
+        else:
+            await query.answer(
+                "❌ هنوز عضو کانال نشدی. اول عضو شو و دوباره امتحان کن.",
+                show_alert=True
+            )
+
+    except Exception:
+        await query.answer(
+            "⚠️ امکان بررسی عضویت وجود نداشت. دوباره امتحان کن.",
+            show_alert=True
+        )
 # ---------- Run ----------
 
 def main():
@@ -245,6 +282,7 @@ def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(check_free_channel, pattern="^check_free_channel$"))
     app.add_handler(MessageHandler(filters.ChatType.CHANNEL, channel_id))
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
