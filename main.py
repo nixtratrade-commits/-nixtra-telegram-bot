@@ -151,7 +151,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "🛒 ثبت درخواست خرید":
         user = update.effective_user
 
-     await update.message.reply_text(
+        await update.message.reply_text(
     "💳 پرداخت اشتراک سیگنال Nixtra\n\n"
     "💵 مبلغ: 10 USDT\n"
     "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
