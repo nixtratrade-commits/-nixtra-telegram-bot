@@ -6,7 +6,7 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 TOKEN = os.environ.get("BOT_TOKEN")
-
+ADMIN_ID = os.environ.get("ADMIN_ID")
 
 # ---------- Render Health Server ----------
 
