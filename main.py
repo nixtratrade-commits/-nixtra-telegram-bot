@@ -10,6 +10,7 @@ ADMIN_ID = os.environ.get("ADMIN_ID")
 PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
 FREE_SIGNAL_CHANNEL = os.environ.get("FREE_SIGNAL_CHANNEL")
 FREE_CHANNEL_ID = os.environ.get("FREE_CHANNEL_ID")
+VIP_CHANNEL_ID = os.environ.get("VIP_CHANNEL_ID")
 # ---------- Render Health Server ----------
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -287,7 +288,15 @@ async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"👤 نام: {user.full_name}\n"
                 f"🔹 Username: @{user.username if user.username else 'ندارد'}\n"
                 f"🆔 Telegram ID: {user.id}"
-            )
+            ),
+            reply_markup=InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton(
+                        "✅ تأیید واریز",
+                        callback_data=f"approve_payment:{user.id}"
+                    )
+                ]
+            ])
         )
 # ---------- Run ----------
 
