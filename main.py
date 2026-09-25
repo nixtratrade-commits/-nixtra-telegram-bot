@@ -158,7 +158,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     f"👛 آدرس کیف پول:\n{PAYMENT_WALLET}\n\n"
     "⚠️ لطفاً فقط USDT روی شبکه BEP20 ارسال کنید.\n\n"
     "بعد از پرداخت، رسید پرداخت را ارسال کنید."
-)."
         )
 
         if ADMIN_ID:
