@@ -135,12 +135,40 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
             )
 
-    elif text == "💳 خرید سیگنال":
+     elif text == "💳 خرید سیگنال":
         await update.message.reply_text(
-            "💳 خرید اشتراک سیگنال\n\n"
-            "پلن‌های اشتراک به‌زودی در این قسمت قرار می‌گیرن."
+            "📊 اشتراک سیگنال Nixtra\n\n"
+            "🔹 روزانه ۱ سیگنال\n"
+            "🔹 مدت اشتراک: ۳۰ روز\n"
+            "🔹 قیمت: ۱۰ دلار\n\n"
+            "برای تهیه اشتراک، گزینه «🛒 ثبت درخواست خرید» رو انتخاب کن.",
+            reply_markup=ReplyKeyboardMarkup([
+                ["🛒 ثبت درخواست خرید"],
+                ["🔙 بازگشت"]
+            ], resize_keyboard=True)
+        
+        )
+    elif text == "🛒 ثبت درخواست خرید":
+        user = update.effective_user
+
+        await update.message.reply_text(
+            "✅ درخواست خرید اشتراک شما ثبت شد.\n\n"
+            "پشتیبانی Nixtra برای ادامه مراحل خرید با شما در ارتباط خواهد بود."
         )
 
+        if ADMIN_ID:
+            await context.bot.send_message(
+                chat_id=int(ADMIN_ID),
+                text=(
+                    "💰 درخواست جدید خرید سیگنال\n\n"
+                    f"👤 نام: {user.full_name}\n"
+                    f"📱 یوزرنیم: @{user.username if user.username else 'ندارد'}\n"
+                    f"🆔 Telegram ID: {user.id}\n\n"
+                    "📊 پلن: روزانه ۱ سیگنال\n"
+                    "📅 مدت: ۳۰ روز\n"
+                    "💵 مبلغ: ۱۰ دلار"
+                )
+            )
     elif text == "🔎 استعلام وضعیت اشتراک":
         await update.message.reply_text(
             "🔎 استعلام وضعیت اشتراک\n\n"
