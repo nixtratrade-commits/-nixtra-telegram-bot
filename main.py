@@ -274,13 +274,13 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
     )
 
         if ADMIN_ID:
-        await context.bot.forward_message(
+            await context.bot.forward_message(
             chat_id=int(ADMIN_ID),
             from_chat_id=update.effective_chat.id,
             message_id=update.message.message_id
         )
 
-        await context.bot.send_message(
+            await context.bot.send_message(
             chat_id=int(ADMIN_ID),
             text=(
                 "💳 رسید جدید خرید سیگنال\n\n"
