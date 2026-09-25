@@ -265,6 +265,30 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
             "⚠️ امکان بررسی عضویت وجود نداشت. دوباره امتحان کن.",
             show_alert=True
         )
+        async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+
+    await update.message.reply_text(
+        "✅ رسید پرداخت شما دریافت شد.\n\n"
+        "⏳ لطفاً منتظر بمانید تا وضعیت واریز شما بررسی و تأیید شود."
+    )
+
+    if ADMIN_ID:
+        await context.bot.forward_message(
+            chat_id=int(ADMIN_ID),
+            from_chat_id=update.effective_chat.id,
+            message_id=update.message.message_id
+        )
+
+        await context.bot.send_message(
+            chat_id=int(ADMIN_ID),
+            text=(
+                "💳 رسید جدید خرید سیگنال\n\n"
+                f"👤 نام: {user.full_name}\n"
+                f"🔹 Username: @{user.username if user.username else 'ندارد'}\n"
+                f"🆔 Telegram ID: {user.id}"
+            )
+        )
 # ---------- Run ----------
 
 def main():
@@ -282,6 +306,9 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(check_free_channel, pattern="^check_free_channel$"))
     app.add_handler(MessageHandler(filters.ChatType.CHANNEL, channel_id))
+    app.add_handler(
+        MessageHandler(filters.PHOTO, payment_receipt)
+    )
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
     )
