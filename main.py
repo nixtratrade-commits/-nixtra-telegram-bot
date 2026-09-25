@@ -135,7 +135,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
             )
 
-     elif text == "💳 خرید سیگنال":
+    elif text == "💳 خرید سیگنال":
         await update.message.reply_text(
             "📊 اشتراک سیگنال Nixtra\n\n"
             "🔹 روزانه ۱ سیگنال\n"
