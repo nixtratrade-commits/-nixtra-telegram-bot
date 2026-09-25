@@ -266,6 +266,29 @@ async def check_free_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
             "⚠️ امکان بررسی عضویت وجود نداشت. دوباره امتحان کن.",
             show_alert=True
         )
+        async def approve_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    user_id = int(query.data.split(":")[1])
+
+    invite = await context.bot.create_chat_invite_link(
+        chat_id=int(VIP_CHANNEL_ID),
+        member_limit=1
+    )
+
+    await context.bot.send_message(
+        chat_id=user_id,
+        text=(
+            "✅ پرداخت شما تأیید شد.\n\n"
+            "🎟 برای ورود به کانال VIP از لینک زیر استفاده کنید:\n"
+            f"{invite.invite_link}\n\n"
+            "⏳ مدت اشتراک شما ۳۰ روز است."
+        )
+    )
+
+    await query.edit_message_reply_markup(reply_markup=None)
+    await query.message.reply_text("✅ پرداخت تأیید شد و لینک VIP برای خریدار ارسال شد.")
 async def payment_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = update.effective_user
 
@@ -314,6 +337,7 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(check_free_channel, pattern="^check_free_channel$"))
+    app.add_handler(CallbackQueryHandler(approve_payment, pattern="^approve_payment:"))
     app.add_handler(MessageHandler(filters.ChatType.CHANNEL, channel_id))
     app.add_handler(
         MessageHandler(filters.PHOTO, payment_receipt)
