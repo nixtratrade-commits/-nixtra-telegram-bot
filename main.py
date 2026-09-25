@@ -129,7 +129,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )]
         ])
 
-        await update.message.reply_text(
+            await update.message.reply_text(
             "🎁 سیگنال رایگان Nixtra\n\n"
             "برای مشاهده سیگنال‌های رایگان، وارد کانال شو 👇",
             reply_markup=keyboard
