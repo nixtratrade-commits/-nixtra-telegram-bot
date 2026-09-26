@@ -40,9 +40,71 @@ def init_db():
         )
         """
     )
+        cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS course_purchases (
+            user_id INTEGER NOT NULL,
+            course_level TEXT NOT NULL,
+            purchase_date TEXT NOT NULL,
+            PRIMARY KEY (user_id, course_level)
+        )
+        """
+    )
     conn.commit()
     conn.close()
+def has_course_access(user_id, course_level):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
 
+    cursor.execute(
+        """
+        SELECT 1 FROM course_purchases
+        WHERE user_id = ? AND course_level = ?
+        """,
+        (user_id, course_level),
+    )
+
+    result = cursor.fetchone()
+    conn.close()
+
+    return result is not None
+def grant_course_access(user_id, course_level):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT OR IGNORE INTO course_purchases
+        (user_id, course_level, purchase_date)
+        VALUES (?, ?, ?)
+        """,
+        (
+            user_id,
+            course_level,
+            datetime.now(timezone.utc).isoformat(),
+        ),
+    )
+
+    conn.commit()
+    conn.close()
+async def open_course_lesson(update, course_level, video_file_id=None):
+    user_id = update.effective_user.id
+
+    if not has_course_access(user_id, course_level):
+        await update.message.reply_text(
+            "🔒 شما به این دوره دسترسی ندارید.\n\n"
+            "برای مشاهده ویدیوهای این دوره ابتدا باید دوره را تهیه کنید."
+        )
+        return
+
+    if video_file_id:
+        await update.message.reply_video(
+            video=video_file_id
+        )
+    else:
+        await update.message.reply_text(
+            "🎬 ویدیوی این درس به‌زودی در این قسمت قرار می‌گیرد."
+        )
 # ---------- Render Health Server ----------
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -309,6 +371,24 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
+            elif text in [
+        "1️⃣ آشنایی با بازارهای مالی",
+        "2️⃣ انواع بازارهای مالی",
+        "3️⃣ بروکر و صرافی چیست؟",
+        "4️⃣ آشنایی با TradingView",
+        "5️⃣ نمودار و کندل چیست؟",
+        "6️⃣ تایم‌فریم چیست؟",
+        "7️⃣ پوزیشن و انواع سفارش",
+        "8️⃣ Long و Short",
+        "9️⃣ Spot و Futures",
+        "🔟 اهرم و مارجین",
+        "1️⃣1️⃣ حد سود و حد ضرر",
+        "1️⃣2️⃣ اولین معامله آزمایشی",
+    ]:
+        await open_course_lesson(
+            update,
+            "beginner",
+        )
     elif text == "🟡 سطح متوسط":
         keyboard = [
             ["1️⃣ ساختار بازار و روند"],
@@ -335,6 +415,25 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
+    elif text in [
+        "1️⃣ ساختار بازار و روند",
+        "2️⃣ حمایت و مقاومت",
+        "3️⃣ کندل‌خوانی",
+        "4️⃣ تحلیل تکنیکال",
+        "5️⃣ پرایس اکشن",
+        "6️⃣ اندیکاتورها",
+        "7️⃣ فیبوناچی",
+        "8️⃣ نقاط ورود و خروج",
+        "9️⃣ ریسک به ریوارد",
+        "🔟 مدیریت سرمایه",
+        "1️⃣1️⃣ حجم معامله",
+        "1️⃣2️⃣ اخبار و تقویم اقتصادی",
+        "1️⃣3️⃣ ژورنال معاملاتی",
+    ]:
+        await open_course_lesson(
+            update,
+            "intermediate",
+        )
     elif text == "🔴 سطح حرفه‌ای":
         keyboard = [
             ["1️⃣ پرایس اکشن پیشرفته"],
@@ -359,6 +458,25 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 keyboard,
                 resize_keyboard=True,
             ),
+        )
+    elif text in [
+        "1️⃣ ساختار بازار و روند",
+        "2️⃣ حمایت و مقاومت",
+        "3️⃣ کندل‌خوانی",
+        "4️⃣ تحلیل تکنیکال",
+        "5️⃣ پرایس اکشن",
+        "6️⃣ اندیکاتورها",
+        "7️⃣ فیبوناچی",
+        "8️⃣ نقاط ورود و خروج",
+        "9️⃣ ریسک به ریوارد",
+        "🔟 مدیریت سرمایه",
+        "1️⃣1️⃣ حجم معامله",
+        "1️⃣2️⃣ اخبار و تقویم اقتصادی",
+        "1️⃣3️⃣ ژورنال معاملاتی",
+    ]:
+        await open_course_lesson(
+            update,
+            "intermediate",
         )
     elif text == "🔙 بازگشت به دوره‌ها":
         keyboard = [
