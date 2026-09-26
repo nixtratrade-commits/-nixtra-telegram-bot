@@ -840,12 +840,12 @@ def main():
             pattern="^check_free_channel$",
         )
     )
-app.add_handler(
+    app.add_handler(
     CallbackQueryHandler(
         approve_purchase,
         pattern="^approve_purchase:",
     )
-app.add_handler(
+    app.add_handler(
     CallbackQueryHandler(
         approve_purchase,
         pattern="^approve_purchase:",
