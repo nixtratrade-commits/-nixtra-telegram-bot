@@ -544,7 +544,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
     elif text == "💎 خرید کامل سه سطح":
                 user_id = update.effective_user.id
-                        pending_purchases[user_id] = "all_courses"
+                       pending_purchases[user_id] = "all_courses"
         await update.message.reply_text(
             "💎 پکیج کامل آموزش بازارهای مالی\n\n"
             "🟢 دوره مقدماتی\n"
