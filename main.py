@@ -845,6 +845,7 @@ def main():
         approve_purchase,
         pattern="^approve_purchase:",
     )
+        )
     app.add_handler(
     CallbackQueryHandler(
         approve_purchase,
