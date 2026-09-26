@@ -483,6 +483,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ["🟢 سطح مقدماتی"],
             ["🟡 سطح متوسط"],
             ["🔴 سطح حرفه‌ای"],
+            ["💎 خرید کامل سه سطح"],
             ["🔙 بازگشت"],
         ]
 
@@ -499,7 +500,56 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "💳 خرید آموزش\n\n"
             "اطلاعات خرید دوره‌ها در این قسمت قرار می‌گیره."
         )
+    elif text == "🟢 خرید دوره مقدماتی":
+        await update.message.reply_text(
+            "🟢 دوره مقدماتی\n\n"
+            "💰 قیمت: 20 USDT\n"
+            "♾ دسترسی: دائمی\n\n"
+            "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
+            "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+        )
+    elif text == "🟡 خرید دوره متوسط":
+        user_id = update.effective_user.id
 
+        if not has_course_access(user_id, "beginner"):
+            await update.message.reply_text(
+                "🔒 برای خرید دوره متوسط، ابتدا باید دوره مقدماتی را تهیه کنید."
+            )
+        else:
+            await update.message.reply_text(
+                "🟡 دوره متوسط\n\n"
+                "💰 قیمت: 30 USDT\n"
+                "♾ دسترسی: دائمی\n\n"
+                "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
+                "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+            )
+    elif text == "🔴 خرید دوره حرفه‌ای":
+        user_id = update.effective_user.id
+
+        if not has_course_access(user_id, "intermediate"):
+            await update.message.reply_text(
+                "🔒 برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
+            )
+        else:
+            await update.message.reply_text(
+                "🔴 دوره حرفه‌ای\n\n"
+                "💰 قیمت: 50 USDT\n"
+                "♾ دسترسی: دائمی\n\n"
+                "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
+                "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+            )
+    elif text == "💎 خرید کامل سه سطح":
+        await update.message.reply_text(
+            "💎 پکیج کامل آموزش بازارهای مالی\n\n"
+            "🟢 دوره مقدماتی\n"
+            "🟡 دوره متوسط\n"
+            "🔴 دوره حرفه‌ای\n\n"
+            "💰 قیمت کل: 100 USDT\n"
+            "♾ دسترسی به هر سه دوره: دائمی\n\n"
+            "با خرید این پکیج، هر سه سطح به‌صورت همزمان برای شما فعال می‌شود.\n\n"
+            "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
+            "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+        )
     elif text == "📍 شهرهای برگزارکننده":
         await update.message.reply_text(
             "📍 شهرهای برگزارکننده سمینار\n\n"
