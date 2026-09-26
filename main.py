@@ -284,7 +284,98 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
+    elif text == "🟢 سطح مقدماتی":
+        keyboard = [
+            ["1️⃣ آشنایی با بازارهای مالی"],
+            ["2️⃣ انواع بازارهای مالی"],
+            ["3️⃣ بروکر و صرافی چیست؟"],
+            ["4️⃣ آشنایی با TradingView"],
+            ["5️⃣ نمودار و کندل چیست؟"],
+            ["6️⃣ تایم‌فریم چیست؟"],
+            ["7️⃣ پوزیشن و انواع سفارش"],
+            ["8️⃣ Long و Short"],
+            ["9️⃣ Spot و Futures"],
+            ["🔟 اهرم و مارجین"],
+            ["1️⃣1️⃣ حد سود و حد ضرر"],
+            ["1️⃣2️⃣ اولین معامله آزمایشی"],
+            ["🔙 بازگشت به دوره‌ها"],
+        ]
 
+        await update.message.reply_text(
+            "🟢 دوره مقدماتی Nixtra\n\n"
+            "یکی از درس‌ها را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+            elif text == "🟡 سطح متوسط":
+        keyboard = [
+            ["1️⃣ ساختار بازار و روند"],
+            ["2️⃣ حمایت و مقاومت"],
+            ["3️⃣ کندل‌خوانی"],
+            ["4️⃣ تحلیل تکنیکال"],
+            ["5️⃣ پرایس اکشن"],
+            ["6️⃣ اندیکاتورها"],
+            ["7️⃣ فیبوناچی"],
+            ["8️⃣ نقاط ورود و خروج"],
+            ["9️⃣ ریسک به ریوارد"],
+            ["🔟 مدیریت سرمایه"],
+            ["1️⃣1️⃣ حجم معامله"],
+            ["1️⃣2️⃣ اخبار و تقویم اقتصادی"],
+            ["1️⃣3️⃣ ژورنال معاملاتی"],
+            ["🔙 بازگشت به دوره‌ها"],
+        ]
+
+        await update.message.reply_text(
+            "🟡 دوره متوسط Nixtra\n\n"
+            "یکی از درس‌ها را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+        elif text == "🔴 سطح حرفه‌ای":
+        keyboard = [
+            ["1️⃣ پرایس اکشن پیشرفته"],
+            ["2️⃣ نقدینگی (Liquidity)"],
+            ["3️⃣ شکست و Fake Breakout"],
+            ["4️⃣ سناریونویسی بازار"],
+            ["5️⃣ طراحی Setup معاملاتی"],
+            ["6️⃣ بک‌تست (Backtest)"],
+            ["7️⃣ Win Rate و Expectancy"],
+            ["8️⃣ Drawdown"],
+            ["9️⃣ مدیریت معامله باز"],
+            ["🔟 روان‌شناسی معامله‌گری"],
+            ["1️⃣1️⃣ ساخت Trading Plan"],
+            ["1️⃣2️⃣ طراحی استراتژی شخصی"],
+            ["🔙 بازگشت به دوره‌ها"],
+        ]
+
+        await update.message.reply_text(
+            "🔴 دوره حرفه‌ای Nixtra\n\n"
+            "یکی از درس‌ها را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+        elif text == "🔙 بازگشت به دوره‌ها":
+        keyboard = [
+            ["🟢 سطح مقدماتی"],
+            ["🟡 سطح متوسط"],
+            ["🔴 سطح حرفه‌ای"],
+            ["🔙 بازگشت"],
+        ]
+
+        await update.message.reply_text(
+            "📚 دوره‌های آموزشی Nixtra\n\n"
+            "سطح موردنظر خود را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
     elif text == "💳 خرید اشتراک آموزش":
         await update.message.reply_text(
             "💳 خرید آموزش\n\n"
