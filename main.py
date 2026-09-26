@@ -360,7 +360,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
-        elif text == "🔙 بازگشت به دوره‌ها":
+    elif text == "🔙 بازگشت به دوره‌ها":
         keyboard = [
             ["🟢 سطح مقدماتی"],
             ["🟡 سطح متوسط"],
