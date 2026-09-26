@@ -309,7 +309,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
-     elif text == "🟡 سطح متوسط":
+    elif text == "🟡 سطح متوسط":
         keyboard = [
             ["1️⃣ ساختار بازار و روند"],
             ["2️⃣ حمایت و مقاومت"],
@@ -335,7 +335,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
-     elif text == "🔴 سطح حرفه‌ای":
+    elif text == "🔴 سطح حرفه‌ای":
         keyboard = [
             ["1️⃣ پرایس اکشن پیشرفته"],
             ["2️⃣ نقدینگی (Liquidity)"],
