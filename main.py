@@ -231,7 +231,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 ),
             )
 
-        elif text == "🔎 استعلام وضعیت اشتراک":
+    elif text == "🔎 استعلام وضعیت اشتراک":
         user_id = update.effective_user.id
 
         conn = sqlite3.connect(DB_FILE)
@@ -258,7 +258,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update.message.reply_text(
                     "❌ اشتراک شما به پایان رسیده است."
                 )
-            else:
+        else:
                 total_days = (now - start_date).days + 1
                 remaining_days = max(0, (end_date - now).days)
 
