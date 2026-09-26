@@ -40,7 +40,7 @@ def init_db():
         )
         """
     )
-        cursor.execute(
+    cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS course_purchases (
             user_id INTEGER NOT NULL,
