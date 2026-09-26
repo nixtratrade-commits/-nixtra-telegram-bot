@@ -530,7 +530,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = update.effective_user.id
 
         if not has_course_access(user_id, "intermediate"):
-        await update.message.reply_text(
+            await update.message.reply_text(
                 "🔒 برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
             )
         else:
