@@ -519,7 +519,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
         else:
                         pending_purchases[user_id] = "intermediate"
-            await update.message.reply_text(
+        await update.message.reply_text(
                 "🟡 دوره متوسط\n\n"
                 "💰 قیمت: 30 USDT\n"
                 "♾ دسترسی: دائمی\n\n"
@@ -530,12 +530,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = update.effective_user.id
 
         if not has_course_access(user_id, "intermediate"):
-            await update.message.reply_text(
+        await update.message.reply_text(
                 "🔒 برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
             )
         else:
                         pending_purchases[user_id] = "professional"
-            await update.message.reply_text(
+        await update.message.reply_text(
                 "🔴 دوره حرفه‌ای\n\n"
                 "💰 قیمت: 50 USDT\n"
                 "♾ دسترسی: دائمی\n\n"
