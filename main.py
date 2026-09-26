@@ -371,7 +371,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
-            elif text in [
+    elif text in [
         "1️⃣ آشنایی با بازارهای مالی",
         "2️⃣ انواع بازارهای مالی",
         "3️⃣ بروکر و صرافی چیست؟",
