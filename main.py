@@ -27,6 +27,7 @@ PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
 FREE_SIGNAL_CHANNEL = os.environ.get("FREE_SIGNAL_CHANNEL")
 FREE_CHANNEL_ID = os.environ.get("FREE_CHANNEL_ID")
 VIP_CHANNEL_ID = os.environ.get("VIP_CHANNEL_ID")
+pending_purchases = {}
 DB_FILE = "subscriptions.db"
 def init_db():
     conn = sqlite3.connect(DB_FILE)
@@ -501,6 +502,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "اطلاعات خرید دوره‌ها در این قسمت قرار می‌گیره."
         )
     elif text == "🟢 خرید دوره مقدماتی":
+        user_id = update.effective_user.id
+        pending_purchases[user_id] = "beginner"
         await update.message.reply_text(
             "🟢 دوره مقدماتی\n\n"
             "💰 قیمت: 20 USDT\n"
@@ -510,12 +513,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     elif text == "🟡 خرید دوره متوسط":
         user_id = update.effective_user.id
-
         if not has_course_access(user_id, "beginner"):
             await update.message.reply_text(
                 "🔒 برای خرید دوره متوسط، ابتدا باید دوره مقدماتی را تهیه کنید."
             )
         else:
+                        pending_purchases[user_id] = "intermediate"
             await update.message.reply_text(
                 "🟡 دوره متوسط\n\n"
                 "💰 قیمت: 30 USDT\n"
@@ -531,6 +534,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "🔒 برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
             )
         else:
+                        pending_purchases[user_id] = "professional"
             await update.message.reply_text(
                 "🔴 دوره حرفه‌ای\n\n"
                 "💰 قیمت: 50 USDT\n"
@@ -539,6 +543,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
             )
     elif text == "💎 خرید کامل سه سطح":
+                user_id = update.effective_user.id
+        pending_purchases[user_id] = "all_courses"
         await update.message.reply_text(
             "💎 پکیج کامل آموزش بازارهای مالی\n\n"
             "🟢 دوره مقدماتی\n"
@@ -693,12 +699,53 @@ def activate_subscription(user_id):
 
     conn.commit()
     conn.close()
+async def approve_purchase(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    parts = query.data.split(":")
+    user_id = int(parts[1])
+    purchase_type = parts[2]
+
+    if purchase_type == "beginner":
+        grant_course_access(user_id, "beginner")
+
+    elif purchase_type == "intermediate":
+        grant_course_access(user_id, "intermediate")
+
+    elif purchase_type == "professional":
+        grant_course_access(user_id, "professional")
+
+    elif purchase_type == "all_courses":
+        grant_course_access(user_id, "beginner")
+        grant_course_access(user_id, "intermediate")
+        grant_course_access(user_id, "professional")
+
+    elif purchase_type == "signal":
+        await approve_payment(update, context)
+        return
+
+    pending_purchases.pop(user_id, None)
+
+    await context.bot.send_message(
+        chat_id=user_id,
+        text=(
+            "✅ پرداخت شما تأیید شد.\n\n"
+            "🎓 دسترسی آموزشی شما با موفقیت فعال شد."
+        ),
+    )
+
+    await query.edit_message_reply_markup(reply_markup=None)
+
+    await query.message.reply_text(
+        "✅ پرداخت تأیید شد و دسترسی آموزشی خریدار فعال شد."
+    )
 async def payment_receipt(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE,
 ):
     user = update.effective_user
-
+    purchase_type = pending_purchases.get(user.id, "signal")
     await update.message.reply_text(
         "✅ رسید پرداخت شما دریافت شد.\n\n"
         "⏳ لطفاً منتظر بمانید تا وضعیت واریز شما بررسی و تأیید شود."
@@ -714,7 +761,8 @@ async def payment_receipt(
         await context.bot.send_message(
             chat_id=int(ADMIN_ID),
             text=(
-                "💳 رسید جدید خرید سیگنال\n\n"
+                f"💳 رسید جدید\n\n"
+                f"🛒 نوع خرید: {purchase_type}\n\n"
                 f"👤 نام: {user.full_name}\n"
                 f"🔹 Username: @{user.username if user.username else 'ندارد'}\n"
                 f"🆔 Telegram ID: {user.id}"
@@ -724,7 +772,7 @@ async def payment_receipt(
                     [
                         InlineKeyboardButton(
                             "✅ تأیید واریز",
-                            callback_data=f"approve_payment:{user.id}",
+callback_data=f"approve_purchase:{user.id}:{purchase_type}",
                         )
                     ]
                 ]
@@ -792,7 +840,17 @@ def main():
             pattern="^check_free_channel$",
         )
     )
-
+app.add_handler(
+    CallbackQueryHandler(
+        approve_purchase,
+        pattern="^approve_purchase:",
+    )
+app.add_handler(
+    CallbackQueryHandler(
+        approve_purchase,
+        pattern="^approve_purchase:",
+    )
+)
     app.add_handler(
         CallbackQueryHandler(
             approve_payment,
