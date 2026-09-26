@@ -534,8 +534,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "🔒 برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
             )
         else:
-                        pending_purchases[user_id] = "professional"
-        await update.message.reply_text(
+            pending_purchases[user_id] = "professional"
+            await update.message.reply_text(
                 "🔴 دوره حرفه‌ای\n\n"
                 "💰 قیمت: 50 USDT\n"
                 "♾ دسترسی: دائمی\n\n"
@@ -543,8 +543,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
             )
     elif text == "💎 خرید کامل سه سطح":
-                user_id = update.effective_user.id
-                       pending_purchases[user_id] = "all_courses"
+        user_id = update.effective_user.id
+        pending_purchases[user_id] = "all_courses"
         await update.message.reply_text(
             "💎 پکیج کامل آموزش بازارهای مالی\n\n"
             "🟢 دوره مقدماتی\n"
