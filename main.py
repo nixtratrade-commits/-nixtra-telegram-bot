@@ -231,42 +231,42 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 ),
             )
 
-    elif text == "🔎 استعلام وضعیت اشتراک":
-    user_id = update.effective_user.id
+        elif text == "🔎 استعلام وضعیت اشتراک":
+        user_id = update.effective_user.id
 
-    conn = sqlite3.connect(DB_FILE)
-    cursor = conn.cursor()
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT start_date, end_date FROM subscriptions WHERE user_id = ?",
-        (user_id,),
-    )
-
-    subscription = cursor.fetchone()
-    conn.close()
-
-    if not subscription:
-        await update.message.reply_text(
-            "❌ اشتراک فعالی برای شما ثبت نشده است."
+        cursor.execute(
+            "SELECT start_date, end_date FROM subscriptions WHERE user_id = ?",
+            (user_id,),
         )
-    else:
-        start_date = datetime.fromisoformat(subscription[0])
-        end_date = datetime.fromisoformat(subscription[1])
-        now = datetime.now(timezone.utc)
 
-        if now >= end_date:
+        subscription = cursor.fetchone()
+        conn.close()
+
+        if not subscription:
             await update.message.reply_text(
-                "❌ اشتراک شما به پایان رسیده است."
+                "❌ اشتراک فعالی برای شما ثبت نشده است."
             )
         else:
-            total_days = (now - start_date).days + 1
-            remaining_days = max(0, (end_date - now).days)
+            start_date = datetime.fromisoformat(subscription[0])
+            end_date = datetime.fromisoformat(subscription[1])
+            now = datetime.now(timezone.utc)
 
-            await update.message.reply_text(
-                "✅ اشتراک VIP شما فعال است.\n\n"
-                f"📅 روز {total_days} از اشتراک\n"
-                f"⏳ {remaining_days} روز باقی مانده"
-            )
+            if now >= end_date:
+                await update.message.reply_text(
+                    "❌ اشتراک شما به پایان رسیده است."
+                )
+            else:
+                total_days = (now - start_date).days + 1
+                remaining_days = max(0, (end_date - now).days)
+
+                await update.message.reply_text(
+                    "✅ اشتراک VIP شما فعال است.\n\n"
+                    f"📅 روز {total_days} از اشتراک\n"
+                    f"⏳ {remaining_days} روز باقی مانده"
+                )
 
     elif text == "📚 عناوین دوره‌ها":
         await update.message.reply_text(
