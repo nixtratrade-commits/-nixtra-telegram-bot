@@ -1,4 +1,7 @@
 import os
+import sqlite3
+from datetime import datetime, timedelta, timezone
+DB_FILE = "subscriptions.db"
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -24,7 +27,21 @@ PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET")
 FREE_SIGNAL_CHANNEL = os.environ.get("FREE_SIGNAL_CHANNEL")
 FREE_CHANNEL_ID = os.environ.get("FREE_CHANNEL_ID")
 VIP_CHANNEL_ID = os.environ.get("VIP_CHANNEL_ID")
-
+DB_FILE = "subscriptions.db"
+def init_db():
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS subscriptions (
+            user_id INTEGER PRIMARY KEY,
+            start_date TEXT NOT NULL,
+            end_date TEXT NOT NULL
+        )
+        """
+    )
+    conn.commit()
+    conn.close()
 
 # ---------- Render Health Server ----------
 
@@ -215,10 +232,41 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
     elif text == "🔎 استعلام وضعیت اشتراک":
+    user_id = update.effective_user.id
+
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT start_date, end_date FROM subscriptions WHERE user_id = ?",
+        (user_id,),
+    )
+
+    subscription = cursor.fetchone()
+    conn.close()
+
+    if not subscription:
         await update.message.reply_text(
-            "🔎 استعلام وضعیت اشتراک\n\n"
-            "سیستم استعلام اشتراک در مرحله بعد فعال می‌شه."
+            "❌ اشتراک فعالی برای شما ثبت نشده است."
         )
+    else:
+        start_date = datetime.fromisoformat(subscription[0])
+        end_date = datetime.fromisoformat(subscription[1])
+        now = datetime.now(timezone.utc)
+
+        if now >= end_date:
+            await update.message.reply_text(
+                "❌ اشتراک شما به پایان رسیده است."
+            )
+        else:
+            total_days = (now - start_date).days + 1
+            remaining_days = max(0, (end_date - now).days)
+
+            await update.message.reply_text(
+                "✅ اشتراک VIP شما فعال است.\n\n"
+                f"📅 روز {total_days} از اشتراک\n"
+                f"⏳ {remaining_days} روز باقی مانده"
+            )
 
     elif text == "📚 عناوین دوره‌ها":
         await update.message.reply_text(
@@ -321,7 +369,7 @@ async def approve_payment(
     await query.answer()
 
     user_id = int(query.data.split(":")[1])
-
+    activate_subscription(user_id)
     try:
         invite = await context.bot.create_chat_invite_link(
             chat_id=int(VIP_CHANNEL_ID),
@@ -353,7 +401,28 @@ f"⚠️ خطای VIP:\n{error}"
 
 
 # ---------- Payment Receipt ----------
+def activate_subscription(user_id):
+    start_date = datetime.now(timezone.utc)
+    end_date = start_date + timedelta(days=30)
 
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT OR REPLACE INTO subscriptions
+        (user_id, start_date, end_date)
+        VALUES (?, ?, ?)
+        """,
+        (
+            user_id,
+            start_date.isoformat(),
+            end_date.isoformat(),
+        ),
+    )
+
+    conn.commit()
+    conn.close()
 async def payment_receipt(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE,
@@ -392,7 +461,42 @@ async def payment_receipt(
             ),
         )
 
+async def check_expired_subscriptions(context: ContextTypes.DEFAULT_TYPE):
+    now = datetime.now(timezone.utc)
 
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT user_id FROM subscriptions WHERE end_date <= ?",
+        (now.isoformat(),),
+    )
+
+    expired_users = cursor.fetchall()
+
+    for (user_id,) in expired_users:
+        try:
+            await context.bot.ban_chat_member(
+                chat_id=int(VIP_CHANNEL_ID),
+                user_id=user_id,
+            )
+
+            await context.bot.unban_chat_member(
+                chat_id=int(VIP_CHANNEL_ID),
+                user_id=user_id,
+                only_if_banned=True,
+            )
+
+            cursor.execute(
+                "DELETE FROM subscriptions WHERE user_id = ?",
+                (user_id,),
+            )
+
+        except Exception as error:
+            print(f"EXPIRATION_ERROR {user_id}: {error}")
+
+    conn.commit()
+    conn.close()
 # ---------- Run ----------
 
 def main():
@@ -403,9 +507,13 @@ def main():
         target=run_web_server,
         daemon=True,
     ).start()
-
+    init_db()
     app = Application.builder().token(TOKEN).build()
-
+    app.job_queue.run_repeating(
+        check_expired_subscriptions,
+        interval=3600,
+        first=10,
+    )
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.ChatType.CHANNEL, channel_id))
     app.add_handler(
