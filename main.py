@@ -484,7 +484,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ["🟢 سطح مقدماتی"],
             ["🟡 سطح متوسط"],
             ["🔴 سطح حرفه‌ای"],
-            ["💎 خرید کامل سه سطح"],
             ["🔙 بازگشت"],
         ]
 
