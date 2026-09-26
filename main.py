@@ -269,9 +269,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
 
     elif text == "📚 عناوین دوره‌ها":
+        keyboard = [
+            ["🟢 سطح مقدماتی"],
+            ["🟡 سطح متوسط"],
+            ["🔴 سطح حرفه‌ای"],
+            ["🔙 بازگشت"],
+        ]
+
         await update.message.reply_text(
             "📚 دوره‌های آموزشی Nixtra\n\n"
-            "لیست دوره‌ها در این قسمت نمایش داده خواهد شد."
+            "سطح موردنظر خود را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
         )
 
     elif text == "💳 خرید اشتراک آموزش":
