@@ -515,9 +515,39 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     elif text == "🟢 خرید دوره مقدماتی":
         keyboard = [
+    elif text == "🔙 بازگشت به خرید دوره‌ها":
+        keyboard = [
+            ["🟢 خرید دوره مقدماتی"],
+            ["🟡 خرید دوره متوسط"],
+            ["🔴 خرید دوره حرفه‌ای"],
+            ["💎 خرید کامل سه سطح"],
+            ["🔙 بازگشت"],
+        ]
+
+        await update.message.reply_text(
+            "🎓 خرید دوره‌های آموزشی\n\n"
+            "دوره موردنظر خود را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
             ["✅ تأیید و ادامه خرید مقدماتی"],
             ["🔙 بازگشت"],
         ]
+        await update.message.reply_text(
+            "🟢 دوره مقدماتی بازارهای مالی\n\n"
+            "📚 این دوره شامل آموزش مفاهیم پایه بازارهای مالی، "
+            "کندل، تایم‌فریم، پوزیشن، Long و Short، Spot و Futures، "
+            "اهرم، حد سود و حد ضرر و اولین معامله آزمایشی است.\n\n"
+            "💰 قیمت: 20 USDT\n"
+            "♾ دسترسی: دائمی\n\n"
+            "در صورت تأیید، گزینه «تأیید و ادامه خرید» را بزنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
     elif text == "🔙 بازگشت به خرید دوره‌ها":
         keyboard = [
             ["🟢 خرید دوره مقدماتی"],
