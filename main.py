@@ -163,7 +163,7 @@ def education_menu():
 def seminars_menu():
     return ReplyKeyboardMarkup(
         [
-            ["📍 شهرهای برگزارکننده"],
+            ["📚 عناوین سمینارها"],
             ["🎟 خرید سمینار"],
             ["🔎 استعلام ظرفیت"],
             ["🔙 بازگشت"],
@@ -713,18 +713,67 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{PAYMENT_WALLET}\n\n"
             "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
         )
-    elif text == "📍 شهرهای برگزارکننده":
+    elif text == "📚 عناوین سمینارها":
         await update.message.reply_text(
-            "📍 شهرهای برگزارکننده سمینار\n\n"
-            "اطلاعات شهرها و برنامه سمینارها در این قسمت نمایش داده می‌شه."
+            "💰 سمینار آگاهی مالی\n\n"
+            "در این سمینار درباره مفاهیم مهم آگاهی مالی، "
+            "نگرش درست نسبت به پول، مدیریت بهتر منابع مالی "
+            "و تصمیم‌گیری آگاهانه‌تر در مسائل مالی صحبت می‌کنیم."
         )
-
     elif text == "🎟 خرید سمینار":
-        await update.message.reply_text(
-            "🎟 ثبت‌نام سمینار\n\n"
-            "سمینار موردنظر خودت رو می‌تونی از این قسمت انتخاب کنی."
-        )
+        keyboard = [
+            ["💰 سمینار آگاهی مالی"],
+            ["🔙 بازگشت"],
+        ]
 
+        await update.message.reply_text(
+            "🎟 خرید تیکت سمینار\n\n"
+            "سمینار موردنظر خود را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+    elif text == "💰 سمینار آگاهی مالی":
+        keyboard = [
+            ["📍 شیراز", "📍 تهران"],
+            ["📍 اصفهان", "📍 کرمان"],
+            ["📍 مشهد", "📍 تبریز"],
+            ["🔙 بازگشت"],
+        ]
+
+        await update.message.reply_text(
+            "📍 شهر محل برگزاری سمینار آگاهی مالی را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+    elif text == "📍 شیراز":
+        keyboard = [
+            ["✅ تأیید خرید تیکت شیراز"],
+            ["🔙 بازگشت"],
+        ]
+
+        await update.message.reply_text(
+            "🎟 سمینار آگاهی مالی\n\n"
+            "📍 شهر: شیراز\n"
+            "📅 زمان برگزاری: مهر ۱۴۰۵\n"
+            "💰 مبلغ تیکت: 5 USDT\n\n"
+            "برای ادامه ثبت‌نام، گزینه تأیید خرید را بزنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+    elif text == "✅ تأیید خرید تیکت شیراز":
+        context.user_data["seminar_city"] = "شیراز"
+        context.user_data["seminar_step"] = "first_name"
+
+        await update.message.reply_text(
+            "📝 برای ثبت‌نام، مشخصات شما را مرحله‌به‌مرحله دریافت می‌کنیم.\n\n"
+            "👤 لطفاً نام خود را وارد کنید:"
+        )
     elif text == "🔎 استعلام ظرفیت":
         await update.message.reply_text(
             "🔎 استعلام ظرفیت سمینار\n\n"
