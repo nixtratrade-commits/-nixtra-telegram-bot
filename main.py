@@ -197,7 +197,56 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
+    if context.user_data.get("seminar_step") == "first_name":
+        context.user_data["seminar_first_name"] = text
+        context.user_data["seminar_step"] = "last_name"
 
+        await update.message.reply_text(
+            "👤 لطفاً نام خانوادگی خود را وارد کنید:"
+        )
+        return
+            if context.user_data.get("seminar_step") == "last_name":
+        context.user_data["seminar_last_name"] = text
+        context.user_data["seminar_step"] = "phone"
+
+        await update.message.reply_text(
+            "📱 لطفاً شماره تماس خود را وارد کنید:"
+        )
+        return
+            if context.user_data.get("seminar_step") == "phone":
+        context.user_data["seminar_phone"] = text
+        context.user_data["seminar_step"] = "email"
+
+        await update.message.reply_text(
+            "📧 لطفاً آدرس ایمیل خود را وارد کنید:"
+        )
+        return
+            if context.user_data.get("seminar_step") == "email":
+        context.user_data["seminar_email"] = text
+        context.user_data["seminar_step"] = "confirm_info"
+
+        keyboard = [
+            ["✅ تأیید مشخصات و ادامه پرداخت"],
+            ["🔙 بازگشت"],
+        ]
+
+        await update.message.reply_text(
+            "📋 مشخصات ثبت‌نام شما:\n\n"
+            f"👤 نام: {context.user_data['seminar_first_name']}\n"
+            f"👤 نام خانوادگی: {context.user_data['seminar_last_name']}\n"
+            f"📱 شماره تماس: {context.user_data['seminar_phone']}\n"
+            f"📧 ایمیل: {context.user_data['seminar_email']}\n\n"
+            "🎟 سمینار آگاهی مالی\n"
+            "📍 شیراز\n"
+            "📅 مهر ۱۴۰۵\n"
+            "💰 مبلغ: 5 USDT\n\n"
+            "در صورت صحیح بودن اطلاعات، تأیید کنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+        return
     if text == "📊 سیگنال‌ها":
         await update.message.reply_text(
             "📊 بخش سیگنال‌ها\n\nیکی از گزینه‌های زیر رو انتخاب کن:",
