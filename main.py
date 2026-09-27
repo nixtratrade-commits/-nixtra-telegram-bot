@@ -583,7 +583,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         context.user_data["course_payment_message_id"] = payment_message.message_id
     elif text == "🔙 بازگشت به خرید دوره‌ها":
-              message_id = context.user_data.pop("course_payment_message_id", None)
+        message_id = context.user_data.pop("course_payment_message_id", None)
 
         if message_id:
             try:
