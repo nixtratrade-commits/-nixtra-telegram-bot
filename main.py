@@ -515,23 +515,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     elif text == "🟢 خرید دوره مقدماتی":
         keyboard = [
-        elif text == "🔙 بازگشت به خرید دوره‌ها":
-        keyboard = [
-            ["🟢 خرید دوره مقدماتی"],
-            ["🟡 خرید دوره متوسط"],
-            ["🔴 خرید دوره حرفه‌ای"],
-            ["💎 خرید کامل سه سطح"],
-            ["🔙 بازگشت"],
-        ]
-
-        await update.message.reply_text(
-            "🎓 خرید دوره‌های آموزشی\n\n"
-            "دوره موردنظر خود را انتخاب کنید:",
-            reply_markup=ReplyKeyboardMarkup(
-                keyboard,
-                resize_keyboard=True,
-            ),
-        )
+        
             ["✅ تأیید و ادامه خرید مقدماتی"],
             ["🔙 بازگشت"],
         ]
@@ -592,6 +576,23 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "📌 آدرس کیف پول:\n"
             f"{PAYMENT_WALLET}\n\n"
                         "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+    elif text == "🔙 بازگشت به خرید دوره‌ها":
+        keyboard = [
+            ["🟢 خرید دوره مقدماتی"],
+            ["🟡 خرید دوره متوسط"],
+            ["🔴 خرید دوره حرفه‌ای"],
+            ["💎 خرید کامل سه سطح"],
+            ["🔙 بازگشت"],
+        ]
+
+        await update.message.reply_text(
+            "🎓 خرید دوره‌های آموزشی\n\n"
+            "دوره موردنظر خود را انتخاب کنید:",
             reply_markup=ReplyKeyboardMarkup(
                 keyboard,
                 resize_keyboard=True,
