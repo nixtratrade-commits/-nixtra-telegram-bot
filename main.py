@@ -205,7 +205,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "👤 لطفاً نام خانوادگی خود را وارد کنید:"
         )
         return
-            if context.user_data.get("seminar_step") == "last_name":
+    if context.user_data.get("seminar_step") == "last_name":
         context.user_data["seminar_last_name"] = text
         context.user_data["seminar_step"] = "phone"
 
@@ -213,7 +213,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "📱 لطفاً شماره تماس خود را وارد کنید:"
         )
         return
-            if context.user_data.get("seminar_step") == "phone":
+    if context.user_data.get("seminar_step") == "phone":
         context.user_data["seminar_phone"] = text
         context.user_data["seminar_step"] = "email"
 
@@ -221,7 +221,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "📧 لطفاً آدرس ایمیل خود را وارد کنید:"
         )
         return
-            if context.user_data.get("seminar_step") == "email":
+    if context.user_data.get("seminar_step") == "email":
         context.user_data["seminar_email"] = text
         context.user_data["seminar_step"] = "confirm_info"
 
