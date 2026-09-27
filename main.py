@@ -569,7 +569,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         keyboard = [
 ["🔙 بازگشت به خرید دوره‌ها"],
           ]
-        await update.message.reply_text(
+        payment_message = await update.message.reply_text(
             "💳 پرداخت دوره مقدماتی\n\n"
             "💰 مبلغ: 20 USDT\n"
             "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
@@ -581,8 +581,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
+        context.user_data["course_payment_message_id"] = payment_message.message_id
     elif text == "🔙 بازگشت به خرید دوره‌ها":
-        await update.message.delete()
+              message_id = context.user_data.pop("course_payment_message_id", None)
+
+        if message_id:
+            try:
+                await context.bot.delete_message(
+                    chat_id=update.effective_chat.id,
+                    message_id=message_id,
+                )
+            except Exception:
+                pass
         keyboard = [
             ["🟢 خرید دوره مقدماتی"],
             ["🟡 خرید دوره متوسط"],
