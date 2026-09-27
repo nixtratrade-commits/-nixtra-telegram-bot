@@ -512,12 +512,29 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
+        
     elif text == "🟢 خرید دوره مقدماتی":
         keyboard = [
             ["✅ تأیید و ادامه خرید مقدماتی"],
             ["🔙 بازگشت"],
         ]
+    elif text == "🔙 بازگشت به خرید دوره‌ها":
+        keyboard = [
+            ["🟢 خرید دوره مقدماتی"],
+            ["🟡 خرید دوره متوسط"],
+            ["🔴 خرید دوره حرفه‌ای"],
+            ["💎 خرید کامل سه سطح"],
+            ["🔙 بازگشت"],
+        ]
 
+        await update.message.reply_text(
+            "🎓 خرید دوره‌های آموزشی\n\n"
+            "دوره موردنظر خود را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
         await update.message.reply_text(
             "🟢 دوره مقدماتی بازارهای مالی\n\n"
             "📚 این دوره شامل آموزش مفاهیم پایه بازارهای مالی، "
@@ -536,7 +553,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = update.effective_user.id
         pending_purchases[user_id] = "beginner"
         keyboard = [
-["🔙 بازگشت"],
+["🔙 بازگشت به خرید دوره‌ها"],
           ]
         await update.message.reply_text(
             "💳 پرداخت دوره مقدماتی\n\n"
