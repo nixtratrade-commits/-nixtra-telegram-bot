@@ -153,7 +153,7 @@ def education_menu():
     return ReplyKeyboardMarkup(
         [
             ["📚 عناوین دوره‌ها"],
-            ["💳 خرید اشتراک آموزش"],
+            ["💳 خرید اشتراک دوره ها"],
             ["🔙 بازگشت"],
         ],
         resize_keyboard=True,
@@ -495,7 +495,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 resize_keyboard=True,
             ),
         )
-    elif text == "💳 خرید اشتراک آموزش":
+    elif text == "💳 خرید اشتراک دوره ها":
         keyboard = [
             ["🟢 خرید دوره مقدماتی"],
             ["🟡 خرید دوره متوسط"],
