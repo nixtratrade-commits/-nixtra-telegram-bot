@@ -535,9 +535,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "✅ تأیید و ادامه خرید مقدماتی":
         user_id = update.effective_user.id
         pending_purchases[user_id] = "beginner"
-                keyboard = [
-            ["🔙 بازگشت"],
-        ]
+        keyboard = [
+["🔙 بازگشت"],
+          ]
         await update.message.reply_text(
             "💳 پرداخت دوره مقدماتی\n\n"
             "💰 مبلغ: 20 USDT\n"
