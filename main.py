@@ -535,16 +535,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "✅ تأیید و ادامه خرید مقدماتی":
         user_id = update.effective_user.id
         pending_purchases[user_id] = "beginner"
-        pending_purchases[user_id] = "beginner"
+                keyboard = [
+            ["🔙 بازگشت"],
+        ]
         await update.message.reply_text(
             "💳 پرداخت دوره مقدماتی\n\n"
             "💰 مبلغ: 20 USDT\n"
             "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
             "📌 آدرس کیف پول:\n"
             f"{PAYMENT_WALLET}\n\n"
-            "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
+                        "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
         )
-
     elif text == "🟡 خرید دوره متوسط":
         user_id = update.effective_user.id
 
