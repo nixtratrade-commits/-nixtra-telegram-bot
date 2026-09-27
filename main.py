@@ -496,9 +496,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ),
         )
     elif text == "💳 خرید اشتراک آموزش":
+        keyboard = [
+            ["🟢 خرید دوره مقدماتی"],
+            ["🟡 خرید دوره متوسط"],
+            ["🔴 خرید دوره حرفه‌ای"],
+            ["💎 خرید کامل سه سطح"],
+            ["🔙 بازگشت"],
+        ]
+
         await update.message.reply_text(
-            "💳 خرید آموزش\n\n"
-            "اطلاعات خرید دوره‌ها در این قسمت قرار می‌گیره."
+            "🎓 خرید دوره‌های آموزشی\n\n"
+            "دوره موردنظر خود را انتخاب کنید:",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
         )
     elif text == "🟢 خرید دوره مقدماتی":
         user_id = update.effective_user.id
