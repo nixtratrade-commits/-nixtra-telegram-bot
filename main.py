@@ -598,30 +598,25 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ),
         )
     elif text == "🟡 خرید دوره متوسط":
-        user_id = update.effective_user.id
+        keyboard = [
+            ["✅ تأیید و ادامه خرید متوسط"],
+            ["🔙 بازگشت"],
+        ]
 
-        if not has_course_access(user_id, "beginner"):
-            await update.message.reply_text(
-                "🔒 شما هنوز دوره مقدماتی را تهیه نکرده‌اید.\n\n"
-                "برای خرید دوره متوسط، ابتدا باید دوره مقدماتی را تهیه کنید."
-            )
-        else:
-            keyboard = [
-                ["✅ تأیید و ادامه خرید متوسط"],
-                ["🔙 بازگشت"],
-            ]
-
-            await update.message.reply_text(
-                "🟡 دوره متوسط بازارهای مالی\n\n"
-                "💰 قیمت: 30 USDT\n"
-                "♾ دسترسی: دائمی\n\n"
-                "در صورت تأیید، گزینه «تأیید و ادامه خرید» را بزنید.",
-                reply_markup=ReplyKeyboardMarkup(
-                    keyboard,
-                    resize_keyboard=True,
-                ),
-            )
-
+        await update.message.reply_text(
+            "🟡 دوره متوسط بازارهای مالی\n\n"
+            "📚 شامل آموزش ساختار بازار، حمایت و مقاومت، کندل‌خوانی، "
+            "تحلیل تکنیکال، پرایس اکشن، اندیکاتورها، فیبوناچی، "
+            "نقاط ورود و خروج، ریسک به ریوارد، مدیریت سرمایه، "
+            "حجم معامله، اخبار و تقویم اقتصادی و ژورنال معاملاتی است.\n\n"
+            "💰 قیمت: 30 USDT\n"
+            "♾ دسترسی: دائمی\n\n"
+            "در صورت تأیید، گزینه «تأیید و ادامه خرید متوسط» را بزنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
     elif text == "✅ تأیید و ادامه خرید متوسط":
         user_id = update.effective_user.id
 
