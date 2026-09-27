@@ -582,6 +582,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ),
         )
     elif text == "🔙 بازگشت به خرید دوره‌ها":
+        await update.message.delete()
         keyboard = [
             ["🟢 خرید دوره مقدماتی"],
             ["🟡 خرید دوره متوسط"],
