@@ -336,7 +336,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ["🟢 سطح مقدماتی"],
             ["🟡 سطح متوسط"],
             ["🔴 سطح حرفه‌ای"],
-            ["🔙 بازگشت"],
+            ["🔙 بازگشت به آموزش‌ها"],
         ]
 
         await update.message.reply_text(
@@ -484,7 +484,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ["🟢 سطح مقدماتی"],
             ["🟡 سطح متوسط"],
             ["🔴 سطح حرفه‌ای"],
-            ["🔙 بازگشت"],
+            ["🔙 بازگشت به آموزش‌ها"],
         ]
 
         await update.message.reply_text(
@@ -584,7 +584,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "💳 خرید پنل تخصصی AI\n\n"
             "پلن‌ها و شرایط خرید در این قسمت نمایش داده می‌شه."
         )
-
+    elif text == "🔙 بازگشت به آموزش‌ها":
+        await update.message.reply_text(
+            "🎓 بخش آموزش‌ها\n\nیکی از گزینه‌های زیر رو انتخاب کن:",
+            reply_markup=education_menu(),
+        )
     elif text == "🔙 بازگشت":
         await update.message.reply_text(
             "🏠 منوی اصلی",
