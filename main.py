@@ -513,49 +513,132 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ),
         )
     elif text == "🟢 خرید دوره مقدماتی":
-        user_id = update.effective_user.id
-        pending_purchases[user_id] = "beginner"
+        keyboard = [
+            ["✅ تأیید و ادامه خرید مقدماتی"],
+            ["🔙 بازگشت"],
+        ]
+
         await update.message.reply_text(
-            "🟢 دوره مقدماتی\n\n"
+            "🟢 دوره مقدماتی بازارهای مالی\n\n"
+            "📚 این دوره شامل آموزش مفاهیم پایه بازارهای مالی، "
+            "کندل، تایم‌فریم، پوزیشن، Long و Short، Spot و Futures، "
+            "اهرم، حد سود و حد ضرر و اولین معامله آزمایشی است.\n\n"
             "💰 قیمت: 20 USDT\n"
             "♾ دسترسی: دائمی\n\n"
-            "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
-            "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+            "در صورت تأیید، گزینه «تأیید و ادامه خرید» را بزنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
         )
+
+    elif text == "✅ تأیید و ادامه خرید مقدماتی":
+        user_id = update.effective_user.id
+        pending_purchases[user_id] = "beginner"
+
+        await update.message.reply_text(
+            "💳 پرداخت دوره مقدماتی\n\n"
+            "💰 مبلغ: 20 USDT\n"
+            "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+            "📌 آدرس کیف پول:\n"
+            f"{PAYMENT_WALLET}\n\n"
+            "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
+        )
+
     elif text == "🟡 خرید دوره متوسط":
         user_id = update.effective_user.id
+
         if not has_course_access(user_id, "beginner"):
             await update.message.reply_text(
-                "🔒 برای خرید دوره متوسط، ابتدا باید دوره مقدماتی را تهیه کنید."
+                "🔒 شما هنوز دوره مقدماتی را تهیه نکرده‌اید.\n\n"
+                "برای خرید دوره متوسط، ابتدا باید دوره مقدماتی را تهیه کنید."
             )
         else:
-                        pending_purchases[user_id] = "intermediate"
-        await update.message.reply_text(
-                "🟡 دوره متوسط\n\n"
+            keyboard = [
+                ["✅ تأیید و ادامه خرید متوسط"],
+                ["🔙 بازگشت"],
+            ]
+
+            await update.message.reply_text(
+                "🟡 دوره متوسط بازارهای مالی\n\n"
                 "💰 قیمت: 30 USDT\n"
                 "♾ دسترسی: دائمی\n\n"
-                "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
-                "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+                "در صورت تأیید، گزینه «تأیید و ادامه خرید» را بزنید.",
+                reply_markup=ReplyKeyboardMarkup(
+                    keyboard,
+                    resize_keyboard=True,
+                ),
             )
+
+    elif text == "✅ تأیید و ادامه خرید متوسط":
+        user_id = update.effective_user.id
+
+        if not has_course_access(user_id, "beginner"):
+            await update.message.reply_text(
+                "🔒 شما هنوز دوره مقدماتی را تهیه نکرده‌اید."
+            )
+        else:
+            pending_purchases[user_id] = "intermediate"
+
+            await update.message.reply_text(
+                "💳 پرداخت دوره متوسط\n\n"
+                "💰 مبلغ: 30 USDT\n"
+                "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+                "📌 آدرس کیف پول:\n"
+                f"{PAYMENT_WALLET}\n\n"
+                "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
+            )
+
     elif text == "🔴 خرید دوره حرفه‌ای":
         user_id = update.effective_user.id
 
         if not has_course_access(user_id, "intermediate"):
             await update.message.reply_text(
-                "🔒 برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
+                "🔒 شما هنوز دوره متوسط را تهیه نکرده‌اید.\n\n"
+                "برای خرید دوره حرفه‌ای، ابتدا باید دوره متوسط را تهیه کنید."
+            )
+        else:
+            keyboard = [
+                ["✅ تأیید و ادامه خرید حرفه‌ای"],
+                ["🔙 بازگشت"],
+            ]
+
+            await update.message.reply_text(
+                "🔴 دوره حرفه‌ای بازارهای مالی\n\n"
+                "💰 قیمت: 50 USDT\n"
+                "♾ دسترسی: دائمی\n\n"
+                "در صورت تأیید، گزینه «تأیید و ادامه خرید» را بزنید.",
+                reply_markup=ReplyKeyboardMarkup(
+                    keyboard,
+                    resize_keyboard=True,
+                ),
+            )
+
+    elif text == "✅ تأیید و ادامه خرید حرفه‌ای":
+        user_id = update.effective_user.id
+
+        if not has_course_access(user_id, "intermediate"):
+            await update.message.reply_text(
+                "🔒 شما هنوز دوره متوسط را تهیه نکرده‌اید."
             )
         else:
             pending_purchases[user_id] = "professional"
+
             await update.message.reply_text(
-                "🔴 دوره حرفه‌ای\n\n"
-                "💰 قیمت: 50 USDT\n"
-                "♾ دسترسی: دائمی\n\n"
-                "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
-                "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+                "💳 پرداخت دوره حرفه‌ای\n\n"
+                "💰 مبلغ: 50 USDT\n"
+                "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+                "📌 آدرس کیف پول:\n"
+                f"{PAYMENT_WALLET}\n\n"
+                "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
             )
+
     elif text == "💎 خرید کامل سه سطح":
-        user_id = update.effective_user.id
-        pending_purchases[user_id] = "all_courses"
+        keyboard = [
+            ["✅ تأیید و ادامه خرید پکیج کامل"],
+            ["🔙 بازگشت"],
+        ]
+
         await update.message.reply_text(
             "💎 پکیج کامل آموزش بازارهای مالی\n\n"
             "🟢 دوره مقدماتی\n"
@@ -564,8 +647,24 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "💰 قیمت کل: 100 USDT\n"
             "♾ دسترسی به هر سه دوره: دائمی\n\n"
             "با خرید این پکیج، هر سه سطح به‌صورت همزمان برای شما فعال می‌شود.\n\n"
-            "برای ادامه، مبلغ را به کیف پول اعلام‌شده واریز کنید "
-            "و سپس تصویر رسید پرداخت را برای ربات ارسال کنید."
+            "در صورت تأیید، گزینه «تأیید و ادامه خرید» را بزنید.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard,
+                resize_keyboard=True,
+            ),
+        )
+
+    elif text == "✅ تأیید و ادامه خرید پکیج کامل":
+        user_id = update.effective_user.id
+        pending_purchases[user_id] = "all_courses"
+
+        await update.message.reply_text(
+            "💳 پرداخت پکیج کامل آموزش\n\n"
+            "💰 مبلغ: 100 USDT\n"
+            "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+            "📌 آدرس کیف پول:\n"
+            f"{PAYMENT_WALLET}\n\n"
+            "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
         )
     elif text == "📍 شهرهای برگزارکننده":
         await update.message.reply_text(
