@@ -823,6 +823,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "📝 برای ثبت‌نام، مشخصات شما را مرحله‌به‌مرحله دریافت می‌کنیم.\n\n"
             "👤 لطفاً نام خود را وارد کنید:"
         )
+    elif text == "✅ تأیید مشخصات و ادامه پرداخت":
+        user_id = update.effective_user.id
+        pending_purchases[user_id] = "seminar_shiraz"
+
+        await update.message.reply_text(
+            "💳 پرداخت تیکت سمینار آگاهی مالی\n\n"
+            "📍 شهر: شیراز\n"
+            "📅 زمان برگزاری: مهر ۱۴۰۵\n"
+            "💰 مبلغ: 5 USDT\n"
+            "🌐 شبکه: BEP20 (BNB Smart Chain)\n\n"
+            "📌 آدرس کیف پول:\n"
+            f"{PAYMENT_WALLET}\n\n"
+            "پس از واریز، تصویر رسید پرداخت را همین‌جا برای ربات ارسال کنید."
+        )
     elif text == "🔎 استعلام ظرفیت":
         await update.message.reply_text(
             "🔎 استعلام ظرفیت سمینار\n\n"
